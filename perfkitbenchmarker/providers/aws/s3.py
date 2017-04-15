@@ -55,7 +55,9 @@ class S3Service(object_storage_service.ObjectStorageService):
          's3://%s' % bucket_name,
          '--region=%s' % self.region])
 
+  @vm_util.Retry()
   def DeleteBucket(self, bucket):
+    self.EmptyBucket(bucket)
     vm_util.IssueCommand(
         ['aws', 's3', 'rb',
          's3://%s' % bucket,
